@@ -1,2 +1,2 @@
-# MiracastInApp-Demo
+# MiracastInApp
  Demo about Miracast
