@@ -2,6 +2,11 @@
 
 - If you have any questions/comments, please visit [**Pico Developer Answers**](https://devanswers.pico-interactive.com/) and raise your question there.
 
+## Environment：
+
+- Unity 2019.4.30f1
+- Pico UnityXR platform SDK v1.2.4
+
 ## Description:
 This demo shows how to use Pico UnityXR System APIs to implement Miracast in an application.
 
