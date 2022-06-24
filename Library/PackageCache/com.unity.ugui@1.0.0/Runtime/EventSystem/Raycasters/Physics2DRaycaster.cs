@@ -1,6 +1,11 @@
 using System.Collections.Generic;
 using UnityEngine.UI;
 
+#if PACKAGE_TILEMAP
+using UnityEngine.Tilemaps;
+#endif
+using UnityEngine.U2D;
+
 namespace UnityEngine.EventSystems
 {
     /// <summary>
@@ -59,7 +64,26 @@ namespace UnityEngine.EventSystems
             {
                 for (int b = 0, bmax = hitCount; b < bmax; ++b)
                 {
-                    var sr = m_Hits[b].collider.gameObject.GetComponent<SpriteRenderer>();
+                    Renderer r2d = null;
+                    // Case 1198442: Check for 2D renderers when filling in RaycastResults
+                    var rendererResult = m_Hits[b].collider.gameObject.GetComponent<Renderer>();
+                    if (rendererResult != null)
+                    {
+                        if (rendererResult is SpriteRenderer)
+                        {
+                            r2d = rendererResult;
+                        }
+#if PACKAGE_TILEMAP
+                        if (rendererResult is TilemapRenderer)
+                        {
+                            r2d = rendererResult;
+                        }
+#endif
+                        if (rendererResult is SpriteShapeRenderer)
+                        {
+                            r2d = rendererResult;
+                        }
+                    }
 
                     var result = new RaycastResult
                     {
@@ -71,8 +95,8 @@ namespace UnityEngine.EventSystems
                         screenPosition = eventData.position,
                         displayIndex = displayIndex,
                         index = resultAppendList.Count,
-                        sortingLayer =  sr != null ? sr.sortingLayerID : 0,
-                        sortingOrder = sr != null ? sr.sortingOrder : 0
+                        sortingLayer =  r2d != null ? r2d.sortingLayerID : 0,
+                        sortingOrder = r2d != null ? r2d.sortingOrder : 0
                     };
                     resultAppendList.Add(result);
                 }

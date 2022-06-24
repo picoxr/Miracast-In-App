@@ -114,7 +114,19 @@ namespace UnityEngine.UI
                 // Then call the remaining, such as layout groups that change their children, taking their own RectTransform size into account.
                 for (int i = 0; i < components.Count; i++)
                     if (!(components[i] is ILayoutSelfController))
-                        action(components[i]);
+                    {
+                        var scrollRect = components[i];
+
+                        if (scrollRect && scrollRect is UnityEngine.UI.ScrollRect)
+                        {
+                            if (((UnityEngine.UI.ScrollRect)scrollRect).content != rect)
+                                action(components[i]);
+                        }
+                        else
+                        {
+                            action(components[i]);
+                        }
+                    }
 
                 for (int i = 0; i < rect.childCount; i++)
                     PerformLayoutControl(rect.GetChild(i) as RectTransform, action);

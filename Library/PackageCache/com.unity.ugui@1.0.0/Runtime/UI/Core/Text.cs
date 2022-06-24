@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace UnityEngine.UI
 {
+    [RequireComponent(typeof(CanvasRenderer))]
     [AddComponentMenu("UI/Text", 10)]
     /// <summary>
     /// The default Graphic to draw font data to screen.
@@ -143,11 +144,13 @@ namespace UnityEngine.UI
                 if (m_FontData.font == value)
                     return;
 
-                FontUpdateTracker.UntrackText(this);
+                if (isActiveAndEnabled)
+                    FontUpdateTracker.UntrackText(this);
 
                 m_FontData.font = value;
 
-                FontUpdateTracker.TrackText(this);
+                if (isActiveAndEnabled)
+                    FontUpdateTracker.TrackText(this);
 
 #if UNITY_EDITOR
                 // needed to track font changes from the inspector
@@ -739,8 +742,11 @@ namespace UnityEngine.UI
             // After a Font asset gets re-imported the managed side gets deleted and recreated,
             // that means the delegates are not persisted.
             // so we need to properly enforce a consistent state here.
-            FontUpdateTracker.UntrackText(this);
-            FontUpdateTracker.TrackText(this);
+            if (isActiveAndEnabled)
+            {
+                FontUpdateTracker.UntrackText(this);
+                FontUpdateTracker.TrackText(this);
+            }
 
             // Also the textgenerator is no longer valid.
             cachedTextGenerator.Invalidate();
@@ -762,9 +768,14 @@ namespace UnityEngine.UI
             {
                 Font newFont = m_FontData.font;
                 m_FontData.font = m_LastTrackedFont;
-                FontUpdateTracker.UntrackText(this);
+
+                if (isActiveAndEnabled)
+                    FontUpdateTracker.UntrackText(this);
+
                 m_FontData.font = newFont;
-                FontUpdateTracker.TrackText(this);
+
+                if (isActiveAndEnabled)
+                    FontUpdateTracker.TrackText(this);
 
                 m_LastTrackedFont = newFont;
             }

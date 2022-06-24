@@ -22,6 +22,7 @@ namespace UnityEditor.UI
         SerializedProperty m_ChildScaleHeight;
         SerializedProperty m_ChildForceExpandWidth;
         SerializedProperty m_ChildForceExpandHeight;
+        SerializedProperty m_ReverseArrangement;
 
         protected virtual void OnEnable()
         {
@@ -34,6 +35,7 @@ namespace UnityEditor.UI
             m_ChildScaleHeight = serializedObject.FindProperty("m_ChildScaleHeight");
             m_ChildForceExpandWidth = serializedObject.FindProperty("m_ChildForceExpandWidth");
             m_ChildForceExpandHeight = serializedObject.FindProperty("m_ChildForceExpandHeight");
+            m_ReverseArrangement = serializedObject.FindProperty("m_ReverseArrangement");
         }
 
         public override void OnInspectorGUI()
@@ -42,6 +44,7 @@ namespace UnityEditor.UI
             EditorGUILayout.PropertyField(m_Padding, true);
             EditorGUILayout.PropertyField(m_Spacing, true);
             EditorGUILayout.PropertyField(m_ChildAlignment, true);
+            EditorGUILayout.PropertyField(m_ReverseArrangement, true);
 
             Rect rect = EditorGUILayout.GetControlRect();
             rect = EditorGUI.PrefixLabel(rect, -1, EditorGUIUtility.TrTextContent("Control Child Size"));

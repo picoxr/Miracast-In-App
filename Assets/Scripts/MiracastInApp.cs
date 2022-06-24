@@ -103,7 +103,6 @@ public class MiracastInApp : MonoBehaviour
                 data["description"] = "";
                 string json = data.ToJson();
                 content[i] = json;
-                Debug.Log("Pico Test json:" + json);
                 Debug.Log("content:" + content[i]);
             }
 
@@ -161,7 +160,10 @@ public class MiracastInApp : MonoBehaviour
         }
 
     }
-
+    public void GetConnectedWD()
+    {
+        reminder.text =  PXR_System.GetConnectedWD();
+    }
 
 
 }

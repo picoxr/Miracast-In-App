@@ -1,9 +1,9 @@
 {
-    "m_SelectedDeviceId": "PA7L10DGD1230048G",
+    "m_SelectedDeviceId": "PA7H10MGFB100152W",
     "m_SelectedPackage": {
-        "deviceId": "PA7L10DGD1230048G",
+        "deviceId": "PA7H10MGFB100152W",
         "name": "com.DefaultCompany.Demo",
-        "processId": 18136,
+        "processId": 26935,
         "exited": false
     },
     "m_SelectedPriority": 0,
@@ -79,6 +79,24 @@
             "name": "com.DefaultCompany.Demo",
             "processId": 18136,
             "exited": false
+        },
+        {
+            "deviceId": "PA7H10MGFB100152W",
+            "name": "com.DefaultCompany.Demo",
+            "processId": 19320,
+            "exited": false
+        },
+        {
+            "deviceId": "PA7H10MGFB100152W",
+            "name": "com.DefaultCompany.Demo",
+            "processId": 23377,
+            "exited": false
+        },
+        {
+            "deviceId": "PA7H10MGFB100152W",
+            "name": "com.DefaultCompany.Demo",
+            "processId": 26935,
+            "exited": false
         }
     ],
     "m_Tags": {
@@ -131,7 +149,7 @@
         "MemoryGroup": 2,
         "Behavior": 0
     },
-    "m_Filter": "+",
+    "m_Filter": "GetConnectedWD",
     "m_FilterIsRegularExpression": false,
     "m_SymbolPaths": []
 }

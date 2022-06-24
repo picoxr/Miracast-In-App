@@ -7,6 +7,7 @@ using UnityEngine.Serialization;
 namespace UnityEngine.EventSystems
 {
     [AddComponentMenu("Event/Event System")]
+    [DisallowMultipleComponent]
     /// <summary>
     /// Handles input, raycasting, and sending events.
     /// </summary>
@@ -32,10 +33,14 @@ namespace UnityEngine.EventSystems
             {
                 int index = m_EventSystems.IndexOf(value);
 
-                if (index >= 0)
+                if (index > 0)
                 {
                     m_EventSystems.RemoveAt(index);
                     m_EventSystems.Insert(0, value);
+                }
+                else if (index < 0)
+                {
+                    Debug.LogError("Failed setting EventSystem.current to unknown EventSystem " + value);
                 }
             }
         }
@@ -123,7 +128,8 @@ namespace UnityEngine.EventSystems
         public void UpdateModules()
         {
             GetComponents(m_SystemInputModules);
-            for (int i = m_SystemInputModules.Count - 1; i >= 0; i--)
+            var systemInputModulesCount = m_SystemInputModules.Count;
+            for (int i = systemInputModulesCount - 1; i >= 0; i--)
             {
                 if (m_SystemInputModules[i] && m_SystemInputModules[i].IsActive())
                     continue;
@@ -246,7 +252,8 @@ namespace UnityEngine.EventSystems
         {
             raycastResults.Clear();
             var modules = RaycasterManager.GetRaycasters();
-            for (int i = 0; i < modules.Count; ++i)
+            var modulesCount = modules.Count;
+            for (int i = 0; i < modulesCount; ++i)
             {
                 var module = modules[i];
                 if (module == null || !module.IsActive())
@@ -298,10 +305,7 @@ namespace UnityEngine.EventSystems
         /// </example>
         public bool IsPointerOverGameObject(int pointerId)
         {
-            if (m_CurrentInputModule == null)
-                return false;
-
-            return m_CurrentInputModule.IsPointerOverGameObject(pointerId);
+            return m_CurrentInputModule != null && m_CurrentInputModule.IsPointerOverGameObject(pointerId);
         }
 
         protected override void OnEnable()
@@ -325,7 +329,8 @@ namespace UnityEngine.EventSystems
 
         private void TickModules()
         {
-            for (var i = 0; i < m_SystemInputModules.Count; i++)
+            var systemInputModulesCount = m_SystemInputModules.Count;
+            for (var i = 0; i < systemInputModulesCount; i++)
             {
                 if (m_SystemInputModules[i] != null)
                     m_SystemInputModules[i].UpdateModule();
@@ -335,6 +340,8 @@ namespace UnityEngine.EventSystems
         protected virtual void OnApplicationFocus(bool hasFocus)
         {
             m_HasFocus = hasFocus;
+            if (!m_HasFocus)
+                TickModules();
         }
 
         protected virtual void Update()
@@ -344,7 +351,8 @@ namespace UnityEngine.EventSystems
             TickModules();
 
             bool changedModule = false;
-            for (var i = 0; i < m_SystemInputModules.Count; i++)
+            var systemInputModulesCount = m_SystemInputModules.Count;
+            for (var i = 0; i < systemInputModulesCount; i++)
             {
                 var module = m_SystemInputModules[i];
                 if (module.IsModuleSupported() && module.ShouldActivateModule())
@@ -361,7 +369,7 @@ namespace UnityEngine.EventSystems
             // no event module set... set the first valid one...
             if (m_CurrentInputModule == null)
             {
-                for (var i = 0; i < m_SystemInputModules.Count; i++)
+                for (var i = 0; i < systemInputModulesCount; i++)
                 {
                     var module = m_SystemInputModules[i];
                     if (module.IsModuleSupported())
@@ -375,6 +383,21 @@ namespace UnityEngine.EventSystems
 
             if (!changedModule && m_CurrentInputModule != null)
                 m_CurrentInputModule.Process();
+
+#if UNITY_EDITOR
+            if (Application.isPlaying)
+            {
+                int eventSystemCount = 0;
+                for (int i = 0; i < m_EventSystems.Count; i++)
+                {
+                    if (m_EventSystems[i].GetType() == typeof(EventSystem))
+                        eventSystemCount++;
+                }
+
+                if (eventSystemCount > 1)
+                    Debug.LogWarning("There are " + eventSystemCount + " event systems in the scene. Please ensure there is always exactly one event system in the scene");
+            }
+#endif
         }
 
         private void ChangeEventModule(BaseInputModule module)

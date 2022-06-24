@@ -242,7 +242,8 @@ namespace UnityEngine.EventSystems
             //  if (s_InternalHandlers.Count > 0)
             //      Debug.Log("Executinng " + typeof (T) + " on " + target);
 
-            for (var i = 0; i < internalHandlers.Count; i++)
+            var internalHandlersCount = internalHandlers.Count;
+            for (var i = 0; i < internalHandlersCount; i++)
             {
                 T arg;
                 try
@@ -280,7 +281,8 @@ namespace UnityEngine.EventSystems
         {
             GetEventChain(root, s_InternalTransformList);
 
-            for (var i = 0; i < s_InternalTransformList.Count; i++)
+            var internalTransformListCount = s_InternalTransformList.Count;
+            for (var i = 0; i < internalTransformListCount; i++)
             {
                 var transform = s_InternalTransformList[i];
                 if (Execute(transform.gameObject, eventData, callbackFunction))
@@ -315,7 +317,9 @@ namespace UnityEngine.EventSystems
 
             var components = ListPool<Component>.Get();
             go.GetComponents(components);
-            for (var i = 0; i < components.Count; i++)
+
+            var componentsCount = components.Count;
+            for (var i = 0; i < componentsCount; i++)
             {
                 if (!ShouldSendToComponent<T>(components[i]))
                     continue;

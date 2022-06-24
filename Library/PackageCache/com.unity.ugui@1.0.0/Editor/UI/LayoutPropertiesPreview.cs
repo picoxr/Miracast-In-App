@@ -52,7 +52,10 @@ namespace UnityEditor.Events
             GameObject go = target as GameObject;
             if (!go)
                 return false;
-            return go.GetComponent(typeof(ILayoutElement)) != null;
+
+            // Prevent allocations in the editor by using TryGetComponent
+            ILayoutElement layoutElement;
+            return go.TryGetComponent(out layoutElement);
         }
 
         public override void OnPreviewGUI(Rect r, GUIStyle background)
