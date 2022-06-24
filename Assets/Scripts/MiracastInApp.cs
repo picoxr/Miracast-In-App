@@ -160,10 +160,4 @@ public class MiracastInApp : MonoBehaviour
         }
 
     }
-    public void GetConnectedWD()
-    {
-        reminder.text =  PXR_System.GetConnectedWD();
-    }
-
-
 }
