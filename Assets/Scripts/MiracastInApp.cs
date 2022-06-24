@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using Unity.XR.PXR;
 using UnityEngine;
@@ -81,16 +81,15 @@ public class MiracastInApp : MonoBehaviour
         JArray jArray = JArray.Parse(obj);
         for (int i = 0; i < jArray.Count; i++)
         {
-            Debug.Log("obj:" + obj);
             JsonData data = new JsonData();
             JObject job = (JObject)jArray[i];
-            string StrdeviceAddress = job["b"].ToString();
-            string StrdeviceName = job["c"].ToString();
-            string StrisAvailable = job["d"].ToString();
-            string StrcanConnect = job["e"].ToString();
-            string StrisRemembered = job["f"].ToString();
-            string StrstatusCodeg = job["g"].ToString();
-            Debug.Log("g :" + StrstatusCodeg);
+            string StrdeviceAddress = job["deviceAddress"].ToString();
+            string StrdeviceName = job["deviceName"].ToString();
+            string StrisAvailable = job["isAvailable"].ToString();
+            string StrcanConnect = job["canConnect"].ToString();
+            string StrisRemembered = job["isRemembered"].ToString();
+            string StrstatusCode = job["statusCode"].ToString();  
+
             if (i < 5)
             {
                 deviceName[i].text = StrdeviceName;
@@ -99,12 +98,12 @@ public class MiracastInApp : MonoBehaviour
                 data["isAvailable"] = StrisAvailable;
                 data["canConnect"] = StrcanConnect;
                 data["isRemembered"] = StrisRemembered;
-                data["statusCode"] = StrstatusCodeg;
+                data["statusCode"] = StrstatusCode;
                 data["status"] = "";
                 data["description"] = "";
                 string json = data.ToJson();
                 content[i] = json;
-                Debug.Log("json:" + json);
+                Debug.Log("Pico Test json:" + json);
                 Debug.Log("content:" + content[i]);
             }
 
